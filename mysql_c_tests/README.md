@@ -6,7 +6,7 @@ This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tab
 * db_tb_lang.* contains functions to handle *c_lang* table.
 * Makefile changed to an advance mode
 
-###Lang struct created to handle better its table result set
+**Lang** struct created to handle better its table result set
 
 ##How to import from a SQL file to MariaDB/MySQL
 
