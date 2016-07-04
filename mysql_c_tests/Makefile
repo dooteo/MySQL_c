@@ -5,7 +5,15 @@ INCLUDES = -I/usr/local/include/mysql
 LIBS = -L/usr/local/lib/mysql -lmysqlclient
 MKDIR = mkdir -p
 
-OBJDIR=obj
+# Needed directories
+OBJDIR = obj
+
+SRCS = main.c mysql.c db_tb_lang.c
+OBJS =  $(SRCS:.c=.o)
+# Objects list with pathname included
+OBJS_wPATH = $(patsubst %,$(OBJDIR)/%,$(OBJS)) 
+
+#$(SRCS:.c=.o)
 
 TARGET = mysql_test
 
@@ -14,22 +22,26 @@ TARGET = mysql_test
 all: clearscreen checkdirs $(TARGET)
 
 
-main.o: main.c 	
-	clear
-	$(CC) $(CFLAGS) -c $(INCLUDES) -o $(OBJDIR)/main.o main.c
+# Note: -o $@ says to put the output of the compilation in the file
+#            named on the left side of the :
+#        $< is the first item in the dependencies list
+$(OBJDIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $(INCLUDES) -o $@ $<
 
-mysql.o: mysql.c 
-	$(CC) $(CFLAGS) -c $(INCLUDES) -o $(OBJDIR)/mysql.o mysql.c
 
-db_tb_lang.o: db_tb_lang.c
-	$(CC) $(CFLAGS) -c $(INCLUDES) -o $(OBJDIR)/db_tb_lang.o db_tb_lang.c
+# Note: $^ is right side of the :
+${TARGET}: $(OBJS_wPATH)
+	$(CC) $(CFLAGS) -o $(TARGET) $^  $(LIBS) 
 
-${TARGET}: main.o mysql.o db_tb_lang.o
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJDIR)/main.o $(OBJDIR)/mysql.o $(OBJDIR)/db_tb_lang.o  $(LIBS) 
 
+# Check needed directories exists, otherwise create them
 checkdirs:
 	if [ ! -d "$(OBJDIR)" ]; then $(MKDIR) $(OBJDIR); fi
+
+# Clear terminal or console screen 
 clearscreen:
 	clear
+
+# Delete objects and compiled files
 clean:
 	rm -f $(TARGET) $(OBJDIR)/*
