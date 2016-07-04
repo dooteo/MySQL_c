@@ -1,8 +1,9 @@
 
 CC = gcc
-CFLAGS=-Wall
+CFLAGS = -Wall
 INCLUDES = -I/usr/local/include/mysql
 LIBS = -L/usr/local/lib/mysql -lmysqlclient
+MKDIR = mkdir -p
 
 OBJDIR=obj
 
@@ -27,7 +28,7 @@ ${TARGET}: main.o mysql.o db_tb_lang.o
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJDIR)/main.o $(OBJDIR)/mysql.o $(OBJDIR)/db_tb_lang.o  $(LIBS) 
 
 checkdirs:
-	if [ ! -d "$(OBJDIR)" ]; then mkdir -p $(OBJDIR); fi
+	if [ ! -d "$(OBJDIR)" ]; then $(MKDIR) $(OBJDIR); fi
 clearscreen:
 	clear
 clean:
