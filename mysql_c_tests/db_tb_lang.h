@@ -16,14 +16,25 @@
 #include "mysql.h"
 #include "global_consts.h"
 
+typedef struct tb_lang {
+	unsigned int is_end;
+	unsigned int id;
+	char isocode[10];
+	char engname[45];
+	char origname[45];
+
+	// This time we wont use pointer to next node
+	// as we will no use struct list, but struct array
+	//struct tb_lang *next; 
+} Lang;
+
 unsigned int db_tb_lang_insert(MYSQL *dbconn, char *isocode, char *engname, 
 						char *origname, unsigned int active, my_ulonglong *lastId);
 
 unsigned int db_tb_lang_delete(MYSQL *dbconn, char *isocode);
 
-unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, unsigned int *id, \
-						char **engname, char **origname);
+unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, Lang **my_lang);
 
-unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, unsigned int *id, \
-						char **engname, char **origname);
+unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, Lang **my_lang);
+
 #endif

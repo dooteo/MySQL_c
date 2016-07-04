@@ -217,8 +217,7 @@ unsigned int db_tb_lang_delete(MYSQL *dbconn, char *isocode) {
 
 	return (status);
 }
-unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, unsigned int *id, \
-						char **engname, char **origname) {
+unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, Lang **my_lang) {
 
 	#define STRING_SIZE 45
 
@@ -240,6 +239,7 @@ unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, unsigned int *id, \
 	
 	unsigned long str_len1, str_len2;
 	int param_count;
+	Lang *new_node = malloc(sizeof(Lang));
 
 	stmt = mysql_stmt_init(dbconn);
 	if (stmt == NULL) {
@@ -324,18 +324,16 @@ unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, unsigned int *id, \
 		return(204);
 	}
 
-	// Init data
-	*id = 0;
-
 	// Fetch result set
 	if ( mysql_stmt_fetch(stmt) != 0) {
 		fprintf(stderr, "Could not fetch: %d: %s\n", mysql_stmt_errno(stmt), mysql_stmt_error(stmt));
 	} else {
 		// Store fields values into function's params vars
-		*id = myId;
-		*engname = myEngName;
-		*origname = myOrigName;
+		new_node->id = myId;
+		strncpy(new_node->engname, myEngName, 45);
+		strncpy(new_node->origname, myOrigName, 45);
 	}
+	*my_lang = new_node;
 
 	// Deallocate result set
 	mysql_stmt_free_result(stmt); 
@@ -346,8 +344,10 @@ unsigned int db_tb_lang_get(MYSQL *dbconn, char *isocode, unsigned int *id, \
 	return (status);
 }
 
-unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, unsigned int *id, \
+/* unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, unsigned int *id, \
 						char **engname, char **origname) {
+*/
+unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, Lang **my_lang) {
 
 	#define STRING_SIZE 45
 
@@ -369,6 +369,10 @@ unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, unsigned int *i
 	
 	unsigned long str_len1, str_len2;
 	int param_count;
+
+	unsigned int row;
+	my_ulonglong total_rows = 0;
+	Lang *cur_node = NULL;
 
 	stmt = mysql_stmt_init(dbconn);
 	if (stmt == NULL) {
@@ -451,11 +455,50 @@ unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, unsigned int *i
 		return(202);
 	}
 
-	while ( mysql_stmt_fetch(stmt) != MYSQL_NO_DATA ) {
-		printf("  \t%u\t | \t%s\t | \t%s \t\n", myId ,myEngName, myOrigName);
-		printf(" --------------------------------------------------------------------- \n");	
+	// Note2: If you use mysql_stmt_store_result(), mysql_stmt_num_rows()
+	//    may be called immediately.
+
+	total_rows = mysql_stmt_num_rows(stmt);
+	printf("Rows total: %llu\n", total_rows);
+
+
+	// Note 3: We gonna use an array of Lang struct. I'm realize using a 
+	// list of struct will be another way. But current option is more simple.
+
+	// Check there is more than zero rows in result set
+	if (total_rows == 0) {
+		*my_lang = NULL;
+		return (status);
+	}
+	cur_node = malloc(total_rows * sizeof(Lang));
+	*my_lang = cur_node;
+
+	if (cur_node == NULL) {
+		fprintf(stderr, "Could not allocate memory for Lang struct list.\n");
+		exit(1);
+	} else {
+		printf("Main: %p. Cur: %p", my_lang, cur_node);
 	}
 
+	for(row = 0; row < total_rows; row++) {
+		mysql_stmt_fetch(stmt);
+		
+		cur_node->id = myId;
+		strncpy(cur_node->isocode, myLang, 10);
+		strncpy(cur_node->engname, myEngName, 45);
+		strncpy(cur_node->origname, myOrigName, 45);
+
+		if ( row < (total_rows -1) ) {
+			cur_node->is_end = 0;
+			cur_node++;
+		} else {
+			cur_node->is_end = 1;
+		}
+
+		printf("  %p \t%u\t | \t%s\t | \t%s \t\n", cur_node, myId ,myEngName, myOrigName);
+		printf(" --------------------------------------------------------------------- \n");	
+	}
+	
 	// Deallocate result set
 	mysql_stmt_free_result(stmt); 
 
