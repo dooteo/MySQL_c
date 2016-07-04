@@ -8,9 +8,10 @@ OBJDIR=obj
 
 TARGET = mysql_test
 
-.PHONY: all clean clearscreen
+.PHONY: all clean clearscreen checkdirs
 
-all: clearscreen $(TARGET)
+all: clearscreen checkdirs $(TARGET)
+
 
 main.o: main.c 	
 	clear
@@ -25,6 +26,8 @@ db_tb_lang.o: db_tb_lang.c
 ${TARGET}: main.o mysql.o db_tb_lang.o
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJDIR)/main.o $(OBJDIR)/mysql.o $(OBJDIR)/db_tb_lang.o  $(LIBS) 
 
+checkdirs:
+	if [ ! -d "$(OBJDIR)" ]; then mkdir -p $(OBJDIR); fi
 clearscreen:
 	clear
 clean:
