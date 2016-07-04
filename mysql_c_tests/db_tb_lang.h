@@ -23,7 +23,9 @@ typedef struct tb_lang {
 	char engname[45];
 	char origname[45];
 
-	//struct tb_lang *next;
+	// This time we wont use pointer to next node
+	// as we will no use struct list, but struct array
+	//struct tb_lang *next; 
 } Lang;
 
 unsigned int db_tb_lang_insert(MYSQL *dbconn, char *isocode, char *engname, 
