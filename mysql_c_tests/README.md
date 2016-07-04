@@ -1,5 +1,5 @@
-=MySQL C connection
-==Branch :: Test 03
+#MySQL C connection
+##Branch :: Test 03
 This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tables: *c_lang* and *c_user*.
 
 * mysql.* contains functions to connect with a MariaDB/MySQL db.
@@ -8,7 +8,7 @@ This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tab
 
 
 
-==How to import from a SQL file to MariaDB/MySQL
+##How to import from a SQL file to MariaDB/MySQL
 
 As mysql's 'root' user, run next command:
 
