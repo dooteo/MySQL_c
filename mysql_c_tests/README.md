@@ -1,5 +1,5 @@
 =MySQL C connection
-==Test 01
+==Test 02
 This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tables: *c_lang* and *c_user*.
 
 *main.c* just connects to DB and get c_lang tables rows in a very simple way.
