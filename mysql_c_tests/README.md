@@ -1,10 +1,10 @@
-=MySQL C connection
-==Test 02
+#MySQL C connection
+##Test 02
 This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tables: *c_lang* and *c_user*.
 
 *main.c* just connects to DB and get c_lang tables rows in a very simple way.
 
-==How to import from a SQL file to MariaDB/MySQL
+##How to import from a SQL file to MariaDB/MySQL
 
 As mysql's 'root' user, run next command:
 
