@@ -2,7 +2,7 @@
 ##Test 02
 This example uses 'c_test01' as database (see *install_db.sql* file), with 2 tables: *c_lang* and *c_user*.
 
-In this branch, I put connecion functions for MariaDB/MySQL into mysql.* files. Access to *c_lang* table can be found into db_tb_lang.* files.
+In this branch, I put connection functions for MariaDB/MySQL into mysql.* files. Access to *c_lang* table can be found into db_tb_lang.* files.
 
 *main.c* just connects to DB and get c_lang tables rows in a very simple way.
 
