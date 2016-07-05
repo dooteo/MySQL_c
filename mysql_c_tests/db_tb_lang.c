@@ -65,7 +65,7 @@ unsigned int db_tb_lang_insert(MYSQL *dbconn, char *isocode, char *engname,
 	fprintf(stdout, " total parameters in INSERT: %d\n", param_count);
 	if (param_count != 4) { // validate parameter count
 		fprintf(stderr, " invalid parameter count returned by MySQL\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	// ---- Bind the data for all 4 parameters ----
@@ -111,7 +111,7 @@ unsigned int db_tb_lang_insert(MYSQL *dbconn, char *isocode, char *engname,
 	// ---- Execute the INSERT statement ----
 	if (mysql_stmt_execute(stmt)) {
 		fprintf(stderr, " mysql_stmt_execute(), 1 failed\n%s\n", mysql_stmt_error(stmt));
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	// ---- Get the number of affected rows
@@ -119,7 +119,7 @@ unsigned int db_tb_lang_insert(MYSQL *dbconn, char *isocode, char *engname,
 	fprintf(stdout, " total affected rows (insert 1): %lu\n", (unsigned long) aux);
 	if (aux != 1) { // validate affected rows
 		fprintf(stderr, " invalid affected rows by MySQL\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	aux = mysql_stmt_insert_id(stmt); // To get AUTO_INCREMENT column last ID 
@@ -174,7 +174,7 @@ unsigned int db_tb_lang_delete(MYSQL *dbconn, char *isocode) {
 	fprintf(stdout, " total parameters in DELETE: %d\n", param_count);
 	if (param_count != 1) { // validate parameter count
 		fprintf(stderr, " invalid parameter count returned by MySQL\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	// ---- Bind the data for a parameter ----
@@ -197,7 +197,7 @@ unsigned int db_tb_lang_delete(MYSQL *dbconn, char *isocode) {
 	// ---- Execute the DELETE statement ----
 	if (mysql_stmt_execute(stmt)) {
 		fprintf(stderr, " mysql_stmt_execute(), 1 failed\n%s\n", mysql_stmt_error(stmt));
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	// ---- Get the number of affected rows
@@ -205,7 +205,7 @@ unsigned int db_tb_lang_delete(MYSQL *dbconn, char *isocode) {
 	fprintf(stdout, " total deleted rows: %lu\n", (unsigned long) aux);
 	if (aux != 1) { // validate affected rows
 		fprintf(stderr, " invalid affected rows by MySQL\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 
 	// ---- Close Query ----
@@ -475,7 +475,7 @@ unsigned int db_tb_lang_fetch_rows(MYSQL *dbconn, char *isocode, Lang **my_lang)
 
 	if (cur_node == NULL) {
 		fprintf(stderr, "Could not allocate memory for Lang struct list.\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	} else {
 		printf("Main: %p. Cur: %p", my_lang, cur_node);
 	}

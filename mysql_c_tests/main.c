@@ -12,7 +12,7 @@ int main (int argc, char *argv[]) {
 	status = db_open(&connect, DB_SERVER, DB_USER, DB_PASSWD, DB_NAME);
 	if (status > SUCCESS) {
 		db_print_error(connect);
-		exit (1);
+		exit (EXIT_FAILURE);
 	}
 
 	printf("\t---- Connection succeeded ----\n");
