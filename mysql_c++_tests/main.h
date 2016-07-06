@@ -17,6 +17,8 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 
+#include "db_tb_lang.h"
+
 #define RETURN_SUCCESS 0
 
 #define MYSQL_HOST "localhost"
